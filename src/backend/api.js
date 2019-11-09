@@ -9,7 +9,7 @@ const sockets = {
 
 const rolesToActions = {
   player: ['addPlayer'],
-  host: ['setTeam', 'addPlayer', 'startRound', 'revealAnswer', 'strike', 'endRound']
+  host: ['setTeam', 'addPlayer', 'startRound', 'revealQuestion', 'revealAnswer', 'strike', 'endRound']
 }
 
 const messageRole = (role) => {
@@ -32,24 +32,34 @@ const handleMessage = (message, role, ws) => {
   if(rolesToActions[role].indexOf(message.action) === -1) {
     return false;
   }
+  try {
+    if(message.action === "addPlayer") {
+      game.addPlayer(message.playerName, message.team, messageWs(ws))
+      return true
+    }
 
-  if(message.action === "addPlayer") {
-    return game.addPlayer(message.playerName, message.team, messageWs(ws))
+    if(message.action === "revealAnswer") {
+      game.revealAnswer(message.answerIndex)
+      return true
+    }
+
+    if(message.action === "setTeam") {
+      game.setTeam(message.name)
+      return true
+    }
+
+    game[message.action]()
+    return true
   }
-
-  if(message.action === "revealAnswer") {
-    return game.revealAnswer(message.answerIndex)
+  catch (ex) {
+    console.log(ex)
+    return false
   }
-
-  if(message.action === "setTeam") {
-    return game.setTeam(message.name)
-  }
-
-  game[message.action]()
 }
 
 module.exports = (app) => {
   require('express-ws')(app)
+  console.log(game)
   app.ws('/api/ws/:role', (ws, req) => {
     const role = req.params.role
 
@@ -69,6 +79,12 @@ module.exports = (app) => {
         messageWs(ws)({success: true, response: 'OK'})
       }
     })
-    messageWs(ws)({success: true})
+
+    try {
+      game.updateState()
+    }
+    catch (ex) {
+      console.log(ex)
+    }
   })
 }

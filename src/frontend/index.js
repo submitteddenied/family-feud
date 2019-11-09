@@ -16,13 +16,18 @@ if(wrapper) {
   if(wrapper.getAttribute('class') === 'screen') {
     Component = ScreenComponent
   }
-  ReactDOM.render(<Component state={{connecting: true}} />, wrapper)
+  ReactDOM.render(<Component status={'connecting'} />, wrapper)
 
-  const socket = new WebSocket('ws://' + document.location.host + '/api/ws/' + wrapper.getAttribute('class'))
+  const socket = new WebSocket('ws://localhost:80/api/ws/' + wrapper.getAttribute('class'))
 
   socket.onmessage = function(event) {
-    const data = JSON.parse(event)
-    ReactDOM.render(<Component state={data} channel={socket} />, wrapper)
+    const data = JSON.parse(event.data)
+    if(data.success) {
+      console.log(data)
+    } else {
+      console.log('Updated Game state!')
+      ReactDOM.render(<Component game={data} channel={socket} status={'connected'} />, wrapper)
+    }
   }  
 } else {
   console.log('Base element not found sad panda')

@@ -12,20 +12,20 @@ const SPLASH = 'splash',
 const RESPONSE = 0
 const SCORE = 1
 
-const TEAM_TEMPLATE = () => ({
-  name: '',
+const TEAM_TEMPLATE = (i) => ({
+  name: 'Team ' + i,
   score: 0,
   players: []
 })
 
 class Feud {
   constructor(playerStateUpdate, hostStateUpdate, screenStateUpdate) {
-    this.teams = [TEAM_TEMPLATE(), TEAM_TEMPLATE()]
+    this.teams = [TEAM_TEMPLATE(1), TEAM_TEMPLATE(2)]
     this.state = SPLASH
     this.sub_state = null
     this.round = 0
     this.strikes = 0
-    this.points = 0
+    this.score = 0
     this.turn = null
     this.question = null
     this.responses = []
@@ -158,24 +158,26 @@ class Feud {
   }
 
   updateState() {
-    const players = [
-      this.teams[0].players[this.round], 
-      this.teams[1].players[this.round]
-    ]
-
     const scores = {
       [this.teams[0].name]: this.teams[0].score,
       [this.teams[1].name]: this.teams[1].score
     }
 
     const commonData = {
-      players: players.map((p) => p.name),
       state: this.state,
       sub_state: this.sub_state,
-      score,
+      score: this.score,
       scores,
       response_count: this.responses.length,
       playing_team: ''
+    }
+    
+    if(this.teams[0].players.length > 0 && this.teams[0].players.length > 0 ) {
+      const players = [
+        this.teams[0].players[this.round],
+        this.teams[1].players[this.round]
+      ]
+      commonData.players = players.map((p) => p.name)
     }
 
     if(this.turn) {
@@ -189,24 +191,30 @@ class Feud {
     }, commonData)
 
     this.hostStateUpdate(hostData)
-    console.log(JSON.stringify(hostData))
+    //console.log(JSON.stringify(hostData))
     
-    const playerVisibleInfo = {}
+    const playerVisibleInfo = {
+      responses: this.visibleResponses
+    }
     if(this.question_visible) {
       playerVisibleInfo.question = this.question
-      playerVisibleInfo.responses = this.visibleResponses
     }
-
-    this.screenStateUpdate(Object.assign({}, commonData))
+    this.screenStateUpdate(Object.assign({}, playerVisibleInfo, commonData))
 
     this.playerStateUpdate(Object.assign({
       buzzing: false
-    }, commonData))
+    }, playerVisibleInfo, commonData))
 
     if(this.state === FACE_OFF && this.sub_state === WAITING_BUZZ) {
-      players.forEach((p) => {
-        p.message(Object.assign({buzzing: true}, commonData))
-      })
+      if(this.teams[0].players.length > 0 && this.teams[0].players.length > 0 ) {
+        const players = [
+          this.teams[0].players[this.round],
+          this.teams[1].players[this.round]
+        ]
+        players.forEach((p) => {
+          p.message(Object.assign({buzzing: true}, commonData))
+        })
+      }
     }
   }
 }

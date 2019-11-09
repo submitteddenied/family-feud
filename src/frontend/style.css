@@ -5,3 +5,57 @@ body {
 h1 {
   color: yellow;
 }
+
+.team-1 > .score > h2 {
+  text-align: right;
+}
+
+.big-screen > h1 {
+  text-align: center;
+}
+
+.response {
+  border-color: white;
+  border-width: 2px;
+  border-style: solid;
+  text-transform: capitalize;
+  margin-bottom: 5px;
+}
+
+.team, .up-for-grabs > .score {
+  border: white 3px solid;
+  border-radius: 15%;
+  padding: 7px;
+  background: rgb(0,87,179);
+}
+
+.up-for-grabs > .score {
+  margin-top: 40px;
+  width: 15%;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(0,87,179,1) 0%, rgba(0,212,255,1) 100%);
+}
+
+.team-0 {
+  background: linear-gradient(90deg, rgba(0,87,179,1) 0%, rgba(0,212,255,1) 100%);
+}
+
+.team-1 {
+  background: linear-gradient(270deg, rgba(0,87,179,1) 0%, rgba(0,212,255,1) 100%);
+}
+
+.score h2 {
+  color: white;
+}
+
+.response h2, .response h3 {
+  color: white;
+}
+
+.response h2 {
+  padding-top: 10px;
+}
+
+.response h3 {
+  font-size: 3em;
+}

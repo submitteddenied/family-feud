@@ -29,7 +29,7 @@ module.exports = {
     ]
   },
   devServer: {
-    after: function(app, server, compiler) {
+    before: function(app, server, compiler) {
       const feudApi = require('./src/backend/api.js')
       feudApi(app)
     }
