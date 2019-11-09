@@ -50,23 +50,25 @@ const handleMessage = (message, role, ws) => {
 
 module.exports = (app) => {
   require('express-ws')(app)
-  const router = express.Router()
-  router.ws('/ws/:role', (ws, req) => {
+  app.ws('/api/ws/:role', (ws, req) => {
     const role = req.params.role
-    sockets[role] = ws
+
+    console.log('Connected new client! ' + role)
+
+    sockets[role].push(ws)
     ws.on('close', () => {
       sockets[role] = sockets[role].filter((i) => i !== ws)
+      console.log('Disconnected ' + role)
       //TODO: notify hosts that player disconnected
     })
     ws.on('message', (data) => {
       const body = JSON.parse(data)
       if(!handleMessage(body, role)) {
-        ws.send(JSON.stringify({success: false, response: "You're not allowed to do that!"}))
+        messageWs(ws)({success: false, response: "You're not allowed to do that!"})
       } else {
-        ws.send(JSON.stringify({success: true, response: 'OK'}))
+        messageWs(ws)({success: true, response: 'OK'})
       }
     })
+    messageWs(ws)({success: true})
   })
-
-  app.use('/api', router)
 }

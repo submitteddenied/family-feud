@@ -7,16 +7,23 @@ import ScreenComponent from "./components/ScreenComponent"
 import './style.css'
 
 const wrapper = document.getElementById('base')
+
 if(wrapper) {
-  if(wrapper.getAttribute('class') === 'player') {
-    ReactDOM.render(<PlayerComponent />, wrapper)
-  }
+  let Component = PlayerComponent
   if(wrapper.getAttribute('class') === 'host') {
-    ReactDOM.render(<HostComponent />, wrapper)
+    Component = HostComponent
   }
   if(wrapper.getAttribute('class') === 'screen') {
-    ReactDOM.render(<ScreenComponent />, wrapper)
+    Component = ScreenComponent
   }
+  ReactDOM.render(<Component state={{connecting: true}} />, wrapper)
+
+  const socket = new WebSocket('ws://' + document.location.host + '/api/ws/' + wrapper.getAttribute('class'))
+
+  socket.onmessage = function(event) {
+    const data = JSON.parse(event)
+    ReactDOM.render(<Component state={data} channel={socket} />, wrapper)
+  }  
 } else {
   console.log('Base element not found sad panda')
 }
