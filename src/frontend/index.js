@@ -1,6 +1,20 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import HelloComponent from "./components/HelloComponent"
+import PlayerComponent from "./components/PlayerComponent"
+import HostComponent from "./components/HostComponent"
+import ScreenComponent from "./components/ScreenComponent"
 
 const wrapper = document.getElementById('base')
-wrapper && ReactDOM.render(<HelloComponent />, wrapper)
+if(wrapper) {
+  if(wrapper.getAttribute('class') === 'player') {
+    ReactDOM.render(<PlayerComponent />, wrapper)
+  }
+  if(wrapper.getAttribute('class') === 'host') {
+    ReactDOM.render(<HostComponent />, wrapper)
+  }
+  if(wrapper.getAttribute('class') === 'screen') {
+    ReactDOM.render(<ScreenComponent />, wrapper)
+  }
+} else {
+  console.log('Base element not found sad panda')
+}

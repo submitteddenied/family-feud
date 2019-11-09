@@ -3,7 +3,7 @@ const api = require('./api')
 const app = express()
 require('express-ws')(app)
 
-app.use('/api', api)
+api(app)
 
 app.use(express.static('dist'))
 

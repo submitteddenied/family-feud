@@ -28,6 +28,14 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: path.resolve("./src/frontend/index.html"),
       filename: path.resolve(OUTPUT_DIR, "./index.html")
+    }),
+    new HtmlWebPackPlugin({
+      template: path.resolve("./src/frontend/host.html"),
+      filename: path.resolve(OUTPUT_DIR, "./host.html")
+    }),
+    new HtmlWebPackPlugin({
+      template: path.resolve("./src/frontend/screen.html"),
+      filename: path.resolve(OUTPUT_DIR, "./screen.html")
     })
   ]
 };
