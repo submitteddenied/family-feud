@@ -8,6 +8,22 @@ class ScreenComponent extends Component {
     super()
   }
 
+  componentDidMount() {
+    const html = document.getElementsByTagName('html')[0]
+    html.addEventListener('dblclick', this.fullscreen)
+  }
+
+  fullscreen() {
+    const html = document.getElementsByTagName('html')[0]
+    html.requestFullscreen()
+  }
+
+  componentWillUnmount() {
+    const html = document.getElementsByTagName('html')[0]
+    document.exitFullscreen()
+    html.removeEventListener('dblclick', this.fullscreen)
+  }
+
   renderTeams(state) {
     const teamNames = Object.keys(state.scores)
     return teamNames.map((name, i) => (
