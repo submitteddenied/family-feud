@@ -21,8 +21,18 @@ module.exports = {
         use: {
           loader: 'html-loader'
         }
+      }, 
+      {
+        test: /\.css$/,
+        use:['style-loader','css-loader']
       }
     ]
+  },
+  devServer: {
+    after: function(app, server, compiler) {
+      const feudApi = require('./src/backend/api.js')
+      feudApi(app)
+    }
   },
   plugins: [
     new HtmlWebPackPlugin({

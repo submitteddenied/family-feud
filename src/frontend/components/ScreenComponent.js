@@ -1,15 +1,15 @@
 import React, {Component} from 'react'
 
-class PlayerComponent extends Component {
+class ScreenComponent extends Component {
   constructor() {
     super()
   }
 
   render() {
     return (
-      <h1>Hello Screen</h1>
+      <h1>Family Feud!</h1>
     )
   }
 }
 
-export default PlayerComponent
+export default ScreenComponent

@@ -34,6 +34,7 @@ class Feud {
     this.playerStateUpdate = playerStateUpdate
     this.hostStateUpdate = hostStateUpdate
     this.screenStateUpdate = screenStateUpdate
+    console.log('Starting a new game of feud!')
   }
 
   getTeams() {
@@ -181,16 +182,21 @@ class Feud {
       commonData.playing_team = this.turn
     }
 
-    this.hostStateUpdate(Object.assign({
+    const hostData = Object.assign({
       question: this.question,
-      responses: this.responses
-    }, commonData))
+      responses: this.responses,
+      visibleResponses: this.visibleResponses
+    }, commonData)
 
+    this.hostStateUpdate(hostData)
+    console.log(JSON.stringify(hostData))
+    
     const playerVisibleInfo = {}
     if(this.question_visible) {
       playerVisibleInfo.question = this.question
       playerVisibleInfo.responses = this.visibleResponses
     }
+
     this.screenStateUpdate(Object.assign({}, commonData))
 
     this.playerStateUpdate(Object.assign({

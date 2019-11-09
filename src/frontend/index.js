@@ -4,6 +4,8 @@ import PlayerComponent from "./components/PlayerComponent"
 import HostComponent from "./components/HostComponent"
 import ScreenComponent from "./components/ScreenComponent"
 
+import './style.css'
+
 const wrapper = document.getElementById('base')
 if(wrapper) {
   if(wrapper.getAttribute('class') === 'player') {

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-class PlayerComponent extends Component {
+class HostComponent extends Component {
   constructor() {
     super()
   }
@@ -12,4 +12,4 @@ class PlayerComponent extends Component {
   }
 }
 
-export default PlayerComponent
+export default HostComponent
