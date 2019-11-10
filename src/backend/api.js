@@ -32,6 +32,7 @@ const handleMessage = (message, role, ws) => {
   if(rolesToActions[role].indexOf(message.action) === -1) {
     return false;
   }
+  console.log(JSON.stringify(message))
   try {
     if(message.action === "addPlayer") {
       game.addPlayer(message.playerName, message.team, messageWs(ws))
@@ -44,7 +45,7 @@ const handleMessage = (message, role, ws) => {
     }
 
     if(message.action === "setTeam") {
-      game.setTeam(message.name)
+      game.setTeam(message.teamIdx, message.name)
       return true
     }
 

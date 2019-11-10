@@ -64,7 +64,7 @@ class ScreenComponent extends Component {
         <div className="row justify-content-center">
           <h1>Family Feud!</h1>
         </div>
-        <div className="row  justify-content-between">
+        <div className="row justify-content-between">
           {this.renderTeams(gameState)}
         </div>
         <div className="row">

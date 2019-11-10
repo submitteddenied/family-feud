@@ -37,12 +37,9 @@ class Feud {
     console.log('Starting a new game of feud!')
   }
 
-  getTeams() {
-    return Object.keys(this.teams)
-  }
-
   setTeam(idx, name) {
     this.teams[idx].name = name
+    this.updateState()
   }
 
   addPlayer(name, team, message) {

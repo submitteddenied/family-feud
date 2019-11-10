@@ -20,13 +20,16 @@ if(wrapper) {
 
   const socket = new WebSocket('ws://localhost:80/api/ws/' + wrapper.getAttribute('class'))
 
+  const sendMessage = (data) => {
+    socket.send(JSON.stringify(data))
+  }
   socket.onmessage = function(event) {
     const data = JSON.parse(event.data)
     if(data.success) {
       console.log(data)
     } else {
       console.log('Updated Game state!')
-      ReactDOM.render(<Component game={data} channel={socket} status={'connected'} />, wrapper)
+      ReactDOM.render(<Component game={data} channel={sendMessage} status={'connected'} />, wrapper)
     }
   }  
 } else {

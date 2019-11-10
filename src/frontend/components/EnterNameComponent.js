@@ -14,7 +14,7 @@ class EnterNameComponent extends Component {
   render() {
     return (
       <div className="form-group">
-        <label for="name">Name</label>
+        <label htmlFor="name">Name</label>
         <input type="text" placeholder="Enter name" id="name" className="form-control" ref={this.textInput} />
         <button type="submit" className="btn btn-primary" onClick={(e) => this.submit(e)}>Submit</button>
       </div>
