@@ -51,10 +51,6 @@ class Feud {
   }
 
   startRound() {
-    if([SPLASH, SCOREBOARD].indexOf(this.state) == -1) {
-      throw new Error("Can't start a new round until this round is over")
-    }
-
     if(this.state != SPLASH) {
       this.round++
     }

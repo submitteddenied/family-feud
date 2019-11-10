@@ -91,9 +91,10 @@ class HostComponent extends Component {
         </div>
         <div className="row justify-content-between">
           {teams[0]}
-          {['splash', 'scoreboard'].indexOf(gameState.state) !== -1
-            ? <h2 onClick={() => this.startRound()}>Start round</h2>
-            : <h2 onClick={() => this.strike()}>Strike!</h2>}
+          <div className="col-3">
+            <h2 onClick={() => this.startRound()}>Start round</h2>
+            <h2 onClick={() => this.strike()}>Strike!</h2>
+          </div>
           {teams[1]}
         </div>
         <div className="row justify-content-between turns">
