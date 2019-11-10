@@ -18,7 +18,7 @@ if(wrapper) {
   }
   ReactDOM.render(<Component status={'connecting'} />, wrapper)
 
-  const socket = new WebSocket('ws://localhost:80/api/ws/' + wrapper.getAttribute('class'))
+  const socket = new WebSocket('ws://' + document.location.hostname + ':80/api/ws/' + wrapper.getAttribute('class'))
 
   const sendMessage = (data) => {
     socket.send(JSON.stringify(data))

@@ -30,7 +30,7 @@ class Feud {
     this.question = null
     this.responses = []
     this.visibleResponses = {}
-    this.question_visible = false
+    this.questionVisible = false
     this.playerStateUpdate = playerStateUpdate
     this.hostStateUpdate = hostStateUpdate
     this.screenStateUpdate = screenStateUpdate
@@ -57,18 +57,17 @@ class Feud {
 
     if(this.state != SPLASH) {
       this.round++
-      if(this.round > Math.min(this.teams[this.teamNames[0]].players, this.teams[this.teamNames[1]].players)) {
-        this.round = 0
-      }
     }
 
-    this.question_visible = false
-    this.points = 0
+    this.questionVisible = false
+    this.score = 0
+    this.strikes = 0
     this.question = QUESTION_KEYS[Math.floor(Math.random() * QUESTION_KEYS.length)]
     this.responses = QUESTIONS[this.question]
     this.visibleResponses = {}
-    this.state = FACE_OFF
+    this.state = ANSWERING
     this.sub_state = WAITING_BUZZ
+    this.turn = null
 
     this.updateState()
   }
@@ -91,10 +90,10 @@ class Feud {
   }
 
   revealQuestion() {
-    if(this.question_visible) {
+    if(this.questionVisible) {
       throw new Error("Can't reveal question that's already visible")
     }
-    this.question_visible = true
+    this.questionVisible = true
     this.updateState()
   }
 
@@ -104,6 +103,11 @@ class Feud {
     } else {
       this.turn = this.teams[0].name
     }
+  }
+
+  setTurn(idx) {
+    this.turn = this.teams[idx].name
+    this.updateState()
   }
 
   controllingTeam() {
@@ -122,9 +126,9 @@ class Feud {
       if(this.strikes === 3) {
         this.state = STEALING
         this.swapControl()
-
-        this.updateState()
       }
+      this.updateState()
+      return
     }
 
     if(this.state === STEALING) {
@@ -140,12 +144,28 @@ class Feud {
       score: response[SCORE]
     }
     this.score += response[SCORE]
-    this.updateState()
+    let roundOver = true;
+    for(let i = 0; i < this.responses.length; i++) {
+      if(!this.visibleResponses.hasOwnProperty(i)) {
+        roundOver = false;
+        break;
+      }
+    }
+    if(this.state === STEALING || roundOver) {
+      this.endRound()
+    } else {
+      this.updateState()
+    }
   }
 
   endRound() {
-    const team = this.controllingTeam()
-    team.points += this.points
+    for(let i = 0; i < this.teams.length; i++) {
+      if(this.teams[i].name === this.turn) {
+        console.log('new score for ' + this.turn + ' ' + this.score)
+        this.teams[i].score = this.teams[i].score + this.score
+      }
+    }
+    console.log(JSON.stringify(this.teams))
     this.visibleResponses = this.responses.reduce((memo, r, idx) => {
       memo[idx] = {response: r[RESPONSE], score: r[SCORE]}
       return memo
@@ -163,6 +183,7 @@ class Feud {
     const commonData = {
       state: this.state,
       sub_state: this.sub_state,
+      strikes: this.strikes,
       score: this.score,
       scores,
       response_count: this.responses.length,
@@ -183,8 +204,9 @@ class Feud {
 
     const hostData = Object.assign({
       question: this.question,
+      question_visible: this.questionVisible,
       responses: this.responses,
-      visibleResponses: this.visibleResponses
+      visible_responses: this.visibleResponses
     }, commonData)
 
     this.hostStateUpdate(hostData)
@@ -193,7 +215,7 @@ class Feud {
     const playerVisibleInfo = {
       responses: this.visibleResponses
     }
-    if(this.question_visible) {
+    if(this.questionVisible) {
       playerVisibleInfo.question = this.question
     }
     this.screenStateUpdate(Object.assign({}, playerVisibleInfo, commonData))

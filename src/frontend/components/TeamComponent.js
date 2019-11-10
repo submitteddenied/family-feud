@@ -27,8 +27,12 @@ class TeamComponent extends Component {
   }
 
   render() {
+    const classNames = ["team", "team-" + this.props.teamIdx]
+    if(this.props.name === this.props.playingTeam) {
+      classNames.push('playing')
+    }
     return (
-      <div className={["team", "team-" + this.props.teamIdx].join(' ')} onClick={(e) => this.click(e)}>
+      <div className={classNames.join(' ')} onClick={(e) => this.click(e)}>
         {this.state.naming 
           ? <EnterNameComponent nameCallback={(name) => this.rename(name)} /> 
           : <h2>{this.props.name}</h2>}

@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import ScoreComponent from './ScoreComponent'
 import TeamComponent from './TeamComponent'
 import ResponseComponent from './ResponseComponent'
+import StrikesComponent from './StrikesComponent'
 
 class ScreenComponent extends Component {
   constructor() {
@@ -27,7 +28,7 @@ class ScreenComponent extends Component {
   renderTeams(state) {
     const teamNames = Object.keys(state.scores)
     return teamNames.map((name, i) => (
-      <TeamComponent key={i} teamIdx={i} name={name} score={state.scores[name]} />
+      <TeamComponent key={i} teamIdx={i} name={name} score={state.scores[name]} playingTeam={state.playing_team} />
     ))
   }
 
@@ -49,6 +50,8 @@ class ScreenComponent extends Component {
     )
   }
 
+  
+
   render() {
     const gameState = this.props.game
     if(this.props.status === 'connecting') {
@@ -56,6 +59,8 @@ class ScreenComponent extends Component {
         <h1>Loading...</h1>
       )
     }
+
+    const teams = this.renderTeams(gameState)
     return (
       <div className="screen-container container">
         <div className="row justify-content-center up-for-grabs">
@@ -65,7 +70,9 @@ class ScreenComponent extends Component {
           <h1>Family Feud!</h1>
         </div>
         <div className="row justify-content-between">
-          {this.renderTeams(gameState)}
+          {teams[0]}
+          <StrikesComponent strikes={gameState.strikes} />
+          {teams[1]}
         </div>
         <div className="row">
           {this.renderBigScreen(gameState)}

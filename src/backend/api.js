@@ -9,7 +9,7 @@ const sockets = {
 
 const rolesToActions = {
   player: ['addPlayer'],
-  host: ['setTeam', 'addPlayer', 'startRound', 'revealQuestion', 'revealAnswer', 'strike', 'endRound']
+  host: ['setTeam', 'setTurn', 'addPlayer', 'startRound', 'revealQuestion', 'revealAnswer', 'strike', 'endRound']
 }
 
 const messageRole = (role) => {
@@ -46,6 +46,11 @@ const handleMessage = (message, role, ws) => {
 
     if(message.action === "setTeam") {
       game.setTeam(message.teamIdx, message.name)
+      return true
+    }
+
+    if(message.action === "setTurn") {
+      game.setTurn(message.teamIdx)
       return true
     }
 
